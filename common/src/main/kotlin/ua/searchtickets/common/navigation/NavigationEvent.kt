@@ -1,0 +1,3 @@
+package ua.searchtickets.common.navigation
+
+interface NavigationEvent

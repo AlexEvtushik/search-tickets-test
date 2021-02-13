@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdk
+        targetSdkVersion rootProject.ext.android.targetSdk
+
+        applicationId rootProject.ext.application.applicationId
+        versionCode rootProject.ext.application.versionCode
+        versionName rootProject.ext.application.versionName
+
+        testInstrumentationRunner rootProject.ext.testing.testInstrumentationRunner
+
+        buildConfigField 'String', 'baseUrl', "\"https://yasen.hotellook.com/\""
+
+        resValue 'string', 'google_api_key', "\"AIzaSyCV5Lxcq7ugwWJ8lpvZHG3G6JyOwqdTxMk\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.compiler.java
+        targetCompatibility rootProject.ext.compiler.java
+    }
+
+    kotlinOptions {
+        jvmTarget = rootProject.ext.compiler.java
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    implementation project(':common')
+    implementation project(':data')
+    implementation project(':domain')
+
+    implementation project(':feature-cities')
+    implementation project(':feature-direction')
+    implementation project(':feature-searchtickets')
+
+    implementation rootProject.ext.dependencies.cicerone
+    implementation rootProject.ext.dependencies.constraintlayout
+    implementation rootProject.ext.dependencies.gson
+    implementation rootProject.ext.dependencies.gsonRetrofit
+    implementation rootProject.ext.dependencies.koinScope
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.lifecycleCommonJava8
+    implementation rootProject.ext.dependencies.lifecycleExtensions
+    implementation rootProject.ext.dependencies.multidex
+    implementation rootProject.ext.dependencies.mvicore
+    implementation rootProject.ext.dependencies.mvicoreAndroid
+    implementation rootProject.ext.dependencies.retrofit
+    implementation rootProject.ext.dependencies.retrofitRxJava2
+    implementation rootProject.ext.dependencies.rxAndroid
+    implementation rootProject.ext.dependencies.rxbindingAppcompatV7Kotlin
+    implementation rootProject.ext.dependencies.rxbindingDesign
+    implementation rootProject.ext.dependencies.rxJava
+    implementation rootProject.ext.dependencies.rxKotlin
+    implementation rootProject.ext.dependencies.rxRelay
+}

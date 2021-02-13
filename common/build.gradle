@@ -1,0 +1,20 @@
+apply from: "$rootProject.projectDir/feature.gradle"
+
+android {
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlinx'
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+
+    implementation rootProject.ext.dependencies.adapterDelegates
+    implementation rootProject.ext.dependencies.adapterDelegatesDsl
+    implementation rootProject.ext.dependencies.lifecycleCommonJava8
+    implementation rootProject.ext.dependencies.maps
+    implementation rootProject.ext.dependencies.mapsUtils
+    implementation rootProject.ext.dependencies.material
+    implementation rootProject.ext.dependencies.rxJava
+    implementation rootProject.ext.dependencies.rxRelay
+}

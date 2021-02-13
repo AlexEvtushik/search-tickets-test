@@ -1,0 +1,6 @@
+apply from: "$rootProject.projectDir/feature.gradle"
+
+dependencies {
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.rxJava
+}

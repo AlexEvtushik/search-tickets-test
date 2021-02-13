@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdk
+        targetSdkVersion rootProject.ext.android.targetSdk
+
+        versionCode rootProject.ext.application.versionCode
+        versionName rootProject.ext.application.versionName
+
+        testInstrumentationRunner rootProject.ext.testing.testInstrumentationRunner
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.compiler.java
+        targetCompatibility rootProject.ext.compiler.java
+    }
+
+    kotlinOptions {
+        jvmTarget = rootProject.ext.compiler.java
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}

@@ -1,0 +1,12 @@
+apply from: "$rootProject.projectDir/feature.gradle"
+
+dependencies {
+    implementation project(':common')
+    implementation project(':domain')
+
+    implementation rootProject.ext.dependencies.gson
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.okhttp
+    implementation rootProject.ext.dependencies.retrofit
+    implementation rootProject.ext.dependencies.rxJava
+}

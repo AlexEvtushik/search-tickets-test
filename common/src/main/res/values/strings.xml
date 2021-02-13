@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="from_label">From</string>
+    <string name="to_label">To</string>
+    <string name="search_tickets_label">Search tickets</string>
+    <string name="search_city_label">Search city</string>
+    <string name="something_went_wrong_error">Something went wrong, please try later</string>
+    <string name="direction_from_is_empty_error">Direction From is empty</string>
+    <string name="direction_to_is_empty_error">Direction To is empty</string>
+    <string name="direction_the_same_error">Direction the same</string>
+    <string name="error_loading_cities_error">Error loading cities</string>
+    <string name="cities_not_found_message">Cities not found</string>
+</resources>

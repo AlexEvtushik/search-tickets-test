@@ -1,0 +1,11 @@
+include ':app',
+        ':common',
+        ':data',
+        ':domain',
+        ':feature-cities',
+        ':feature-direction',
+        ':feature-searchtickets'
+
+project(':feature-cities').projectDir = new File(settingsDir, '/features/cities')
+project(':feature-direction').projectDir = new File(settingsDir, '/features/direction')
+project(':feature-searchtickets').projectDir = new File(settingsDir, '/features/searchtickets')

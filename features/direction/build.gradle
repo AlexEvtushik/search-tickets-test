@@ -1,0 +1,19 @@
+apply from: "$rootProject.projectDir/feature.gradle"
+
+dependencies {
+    implementation project(':common')
+    implementation project(':domain')
+
+    implementation rootProject.ext.dependencies.appcompatV7
+    implementation rootProject.ext.dependencies.constraintlayout
+    implementation rootProject.ext.dependencies.koinCore
+    implementation rootProject.ext.dependencies.koinScope
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.lifecycleCommonJava8
+    implementation rootProject.ext.dependencies.material
+    implementation rootProject.ext.dependencies.mvicore
+    implementation rootProject.ext.dependencies.mvicoreAndroid
+    implementation rootProject.ext.dependencies.rxbindingAppcompatV7Kotlin
+    implementation rootProject.ext.dependencies.rxKotlin
+    implementation rootProject.ext.dependencies.rxRelay
+}
