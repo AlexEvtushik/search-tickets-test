@@ -18,6 +18,7 @@ fun GoogleMap.addCityMarker(context: Context, position: LatLng, name: String) {
             )
             .alpha(0.9f)
             .anchor(0.5f, 0.5f)
+            .zIndex(1F)
     )
 }
 
@@ -26,12 +27,14 @@ fun GoogleMap.getPlaneMarker(startPosition: LatLng, endPosition: LatLng): Marker
         .position(startPosition)
         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_plane))
         .anchor(0.5f, 0.5f)
-        .rotation(
-            SphericalUtil.computeHeading(
-                startPosition,
-                endPosition
-            ).toFloat() - 90f
-        )
+        .zIndex(2F)
+        .rotation(getPlaneMarkerRotation(startPosition, endPosition))
+
+fun GoogleMap.getPlaneMarkerRotation(startPosition: LatLng, endPosition: LatLng): Float =
+    SphericalUtil.computeHeading(
+        startPosition,
+        endPosition
+    ).toFloat() - 90f
 
 fun GoogleMap.addPlanePath(startPosition: LatLng, endPosition: LatLng) {
     addPolyline(

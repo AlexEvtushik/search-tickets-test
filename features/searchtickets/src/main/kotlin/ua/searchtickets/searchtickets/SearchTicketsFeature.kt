@@ -21,7 +21,8 @@ class SearchTicketsFeature(initialState: State) :
     data class State(
         val directionFrom: CityEntity,
         val directionTo: CityEntity,
-        val directionFraction: Double = 0.0
+        val directionFraction: Double = MIN_DIRECTION_FRACTION,
+        val leftLoadingTime: Long = MAX_LOADING_TIME
     )
 
     sealed class Wish {
@@ -29,7 +30,7 @@ class SearchTicketsFeature(initialState: State) :
     }
 
     sealed class Effect {
-        class UpdateLoadingTime(val fraction: Double) : Effect()
+        class UpdateLoadingTime(val fraction: Double, val loadingTime: Long) : Effect()
     }
 
     object News
@@ -39,18 +40,19 @@ class SearchTicketsFeature(initialState: State) :
     }
 
     object Actor : BaseActor<State, Wish, Effect> {
-        override fun invoke(state: State, wish: Wish): Observable<out Effect> = when (wish) {
-            Wish.LoadTickets -> loadTickets()
+        override fun invoke(state: State, wish: Wish): Observable<Effect> = when (wish) {
+            Wish.LoadTickets -> loadTickets(state)
         }
             .observeOn(AndroidSchedulers.mainThread())
 
-        private fun loadTickets(): Observable<out Effect> =
-            Observable.interval(1, TimeUnit.SECONDS)
-                .takeUntil { tick -> tick.toInt() == MAX_LOADING_TIME }
-                .map {
+        private fun loadTickets(state: State): Observable<Effect> =
+            Observable.interval(INIT_DELAY, PERIOD, TimeUnit.MILLISECONDS)
+                .takeUntil { tick -> tick * PERIOD == state.leftLoadingTime }
+                .map { tick ->
+                    val passedTime = tick * PERIOD
                     Effect.UpdateLoadingTime(
-                        fraction = it.toInt() * 100.0 / MAX_LOADING_TIME
-                                * MAX_DIRECTION_FRACTION / 100.0
+                        fraction = passedTime * 100.0 / MAX_LOADING_TIME * MAX_DIRECTION_FRACTION / 100.0,
+                        loadingTime = state.leftLoadingTime - passedTime
                     )
                 }
     }
@@ -58,13 +60,17 @@ class SearchTicketsFeature(initialState: State) :
     object Reducer : BaseReducer<State, Effect> {
         override fun invoke(state: State, effect: Effect): State = when (effect) {
             is Effect.UpdateLoadingTime -> state.copy(
-                directionFraction = effect.fraction
+                directionFraction = effect.fraction,
+                leftLoadingTime = effect.loadingTime
             )
         }
     }
 
     private companion object {
-        const val MAX_LOADING_TIME = 20
-        const val MAX_DIRECTION_FRACTION = 1.0
+        const val INIT_DELAY = 1000L
+        const val PERIOD = 25L
+        const val MAX_LOADING_TIME = 20_000L
+        const val MAX_DIRECTION_FRACTION = 0.99
+        const val MIN_DIRECTION_FRACTION = 0.0
     }
 }

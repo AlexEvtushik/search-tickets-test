@@ -22,26 +22,25 @@ abstract class MviCoreView<UiEvent, State> private constructor(
     ObservableSource<UiEvent> by uiEvents,
     DefaultLifecycleObserver {
 
-  constructor() : this(
-      uiEvents = PublishRelay.create(),
-      states = BehaviorRelay.create()
-  )
+    constructor() : this(
+        uiEvents = PublishRelay.create(),
+        states = BehaviorRelay.create()
+    )
 
-  protected lateinit var disposeBag: CompositeDisposable
+    protected lateinit var disposeBag: CompositeDisposable
 
-  abstract fun createView(inflater: LayoutInflater, container: ViewGroup?): View
+    abstract fun createView(inflater: LayoutInflater, container: ViewGroup?): View
 
-  @CallSuper
-  override fun onStart(owner: LifecycleOwner) {
-    disposeBag = CompositeDisposable()
-    (owner as? Fragment)?.view?.let { bindViews(it) }
-  }
+    @CallSuper
+    override fun onStart(owner: LifecycleOwner) {
+        disposeBag = CompositeDisposable()
+        (owner as? Fragment)?.view?.let { bindViews(it) }
+    }
 
-  @CallSuper
-  override fun onStop(owner: LifecycleOwner) {
-    disposeBag.dispose()
-  }
+    @CallSuper
+    override fun onStop(owner: LifecycleOwner) {
+        disposeBag.dispose()
+    }
 
-  protected abstract fun bindViews(rootView: View)
-
+    protected abstract fun bindViews(rootView: View)
 }

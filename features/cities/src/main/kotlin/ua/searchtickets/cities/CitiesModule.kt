@@ -2,7 +2,6 @@ package ua.searchtickets.cities
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import com.badoo.mvicore.android.AndroidBindings
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import ua.searchtickets.common.entities.DirectionType
@@ -13,11 +12,11 @@ val citiesModule = module {
         scoped { (activity: AppCompatActivity) ->
             CitiesView(activity)
         }
-        scoped<AndroidBindings<CitiesView>> { (
-                                                  lifecycleOwner: LifecycleOwner,
-                                                  directionType: DirectionType,
-                                                  outEventId: EventId
-                                              ) ->
+        scoped { (
+                     lifecycleOwner: LifecycleOwner,
+                     directionType: DirectionType,
+                     outEventId: EventId
+                 ) ->
             CitiesBindings(
                 lifecycleOwner = lifecycleOwner,
                 feature = get { parametersOf(directionType) },

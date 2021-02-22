@@ -70,17 +70,25 @@ class SearchTicketsView : MviCoreView<Unit, SearchTicketsView.ViewModel>() {
                         state.directionFraction == newState.directionFraction
             }
                 .subscribe { state ->
-                    planeMarker?.remove()
-                    planeMarker = googleMap.addMarker(
-                        googleMap.getPlaneMarker(
-                            SphericalUtil.interpolate(
-                                state.directionFromLocation,
-                                state.directionToLocation,
-                                state.directionFraction
-                            ),
+                    val planeLocation = SphericalUtil.interpolate(
+                        state.directionFromLocation,
+                        state.directionToLocation,
+                        state.directionFraction
+                    )
+                    if (planeMarker == null) {
+                        planeMarker = googleMap.addMarker(
+                            googleMap.getPlaneMarker(
+                                planeLocation,
+                                state.directionToLocation
+                            )
+                        )
+                    } else {
+                        planeMarker?.position = planeLocation
+                        planeMarker?.rotation = googleMap.getPlaneMarkerRotation(
+                            planeLocation,
                             state.directionToLocation
                         )
-                    )
+                    }
                 }
                 .addTo(disposeBag)
         }

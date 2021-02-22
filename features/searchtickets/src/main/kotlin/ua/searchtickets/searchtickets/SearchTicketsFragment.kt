@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.badoo.mvicore.android.AndroidBindings
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.core.parameter.parametersOf
 import ua.searchtickets.common.platform.argumentNotNull
@@ -23,7 +22,7 @@ class SearchTicketsFragment : ScopeFragment() {
     }
 
     private val mviView: SearchTicketsView by inject()
-    private val bindings: AndroidBindings<SearchTicketsView> by inject {
+    private val bindings: SearchTicketsBindings by inject {
         parametersOf(this, directionFrom, directionTo)
     }
     private var directionFrom: CityEntity by argumentNotNull()
@@ -42,7 +41,7 @@ class SearchTicketsFragment : ScopeFragment() {
     ): View = mviView.createView(inflater, container)
 
     override fun onDestroy() {
-        super.onDestroy()
         lifecycle.removeObserver(mviView)
+        super.onDestroy()
     }
 }

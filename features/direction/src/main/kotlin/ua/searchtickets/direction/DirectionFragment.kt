@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.badoo.mvicore.android.AndroidBindings
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.core.parameter.parametersOf
 
@@ -15,9 +14,7 @@ class DirectionFragment : ScopeFragment() {
     }
 
     private val mviView: DirectionView by inject()
-    private val bindings: AndroidBindings<DirectionView> by inject {
-        parametersOf(this)
-    }
+    private val bindings: DirectionBindings by inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +29,7 @@ class DirectionFragment : ScopeFragment() {
     ): View = mviView.createView(inflater, container)
 
     override fun onDestroy() {
-        super.onDestroy()
         lifecycle.removeObserver(mviView)
+        super.onDestroy()
     }
 }

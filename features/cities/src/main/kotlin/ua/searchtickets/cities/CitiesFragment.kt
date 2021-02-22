@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.badoo.mvicore.android.AndroidBindings
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.core.parameter.parametersOf
 import ua.searchtickets.common.entities.DirectionType
@@ -27,7 +26,7 @@ class CitiesFragment : ScopeFragment() {
     private val mviView: CitiesView by inject {
         parametersOf(requireActivity() as AppCompatActivity)
     }
-    private val bindings: AndroidBindings<CitiesView> by inject {
+    private val bindings: CitiesBindings by inject {
         parametersOf(this, directionType, outEventId)
     }
     private var directionType: DirectionType by argumentNotNull()
@@ -46,7 +45,7 @@ class CitiesFragment : ScopeFragment() {
     ): View = mviView.createView(inflater, container)
 
     override fun onDestroy() {
-        super.onDestroy()
         lifecycle.removeObserver(mviView)
+        super.onDestroy()
     }
 }
