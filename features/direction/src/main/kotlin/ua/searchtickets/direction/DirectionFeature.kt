@@ -1,31 +1,44 @@
 package ua.searchtickets.direction
 
+import android.os.Bundle
+import android.os.Parcelable
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import com.badoo.mvicore.feature.ActorReducerFeature
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.parcelize.Parcelize
 import ua.searchtickets.common.entities.DirectionType
 import ua.searchtickets.common.errors.DirectionFromEmptyError
 import ua.searchtickets.common.errors.DirectionTheSameError
 import ua.searchtickets.common.errors.DirectionToEmptyError
 import ua.searchtickets.common.rxjava.onError
-import ua.searchtickets.direction.DirectionFeature.*
+import ua.searchtickets.direction.DirectionFeature.Effect
+import ua.searchtickets.direction.DirectionFeature.News
+import ua.searchtickets.direction.DirectionFeature.State
+import ua.searchtickets.direction.DirectionFeature.Wish
 import ua.searchtickets.domain.entities.CityEntity
 import com.badoo.mvicore.element.Actor as BaseActor
 import com.badoo.mvicore.element.NewsPublisher as BaseNewsPublisher
 import com.badoo.mvicore.element.Reducer as BaseReducer
 
-class DirectionFeature : ActorReducerFeature<Wish, Effect, State, News>(
-    initialState = State(),
-    actor = Actor,
-    reducer = Reducer,
-    newsPublisher = NewsPublisher
-) {
+class DirectionFeature(timeCapsule: AndroidTimeCapsule) :
+    ActorReducerFeature<Wish, Effect, State, News>(
+        initialState = timeCapsule.state() ?: State(),
+        actor = Actor,
+        reducer = Reducer,
+        newsPublisher = NewsPublisher
+    ) {
 
+    init {
+        timeCapsule.register(KEY_TIME_CAPSULE) { state.toParcelable() }
+    }
+
+    @Parcelize
     data class State(
         val directionFrom: CityEntity? = null,
         val directionTo: CityEntity? = null,
         val error: Throwable? = null
-    )
+    ) : Parcelable
 
     sealed class Wish {
         object ChooseDirectionFrom : Wish()
@@ -110,5 +123,16 @@ class DirectionFeature : ActorReducerFeature<Wish, Effect, State, News>(
             )
             else -> null
         }
+    }
+
+    private companion object {
+        const val KEY_TIME_CAPSULE = "key:direction_time_capsule"
+        const val KEY_FEATURE_STATE = "key:direction_feature_state"
+
+        fun AndroidTimeCapsule.state() =
+            get<Bundle>(KEY_TIME_CAPSULE)?.getParcelable(KEY_FEATURE_STATE) as? State
+
+        fun State.toParcelable() =
+            Bundle().apply { putParcelable(KEY_FEATURE_STATE, this@toParcelable) }
     }
 }

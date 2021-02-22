@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
@@ -23,9 +24,11 @@ class SearchTicketsFragment : ScopeFragment() {
         }
     }
 
+    private lateinit var timeCapsule: AndroidTimeCapsule
+
     private val mviView: SearchTicketsView by inject()
     private val bindings: SearchTicketsBindings by inject {
-        parametersOf(this, directionFrom, directionTo)
+        parametersOf(this, timeCapsule, directionFrom, directionTo)
     }
     private var directionFrom: CityEntity by argumentNotNull()
     private var directionTo: CityEntity by argumentNotNull()
@@ -34,6 +37,7 @@ class SearchTicketsFragment : ScopeFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        timeCapsule = AndroidTimeCapsule(savedInstanceState)
         bindings.setup(mviView)
         lifecycle.addObserver(mviView)
     }
@@ -43,6 +47,11 @@ class SearchTicketsFragment : ScopeFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = mviView.createView(inflater, container)
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.saveState(outState)
+    }
 
     override fun onDestroy() {
         lifecycle.removeObserver(mviView)

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.badoo.mvicore.android.AndroidTimeCapsule
 import org.koin.androidx.scope.ScopeFragment
-import org.koin.androidx.scope.fragmentScope
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import org.koin.core.scope.newScope
@@ -26,11 +26,13 @@ class CitiesFragment : ScopeFragment() {
         }
     }
 
+    private lateinit var timeCapsule: AndroidTimeCapsule
+
     private val mviView: CitiesView by inject {
         parametersOf(requireActivity() as AppCompatActivity)
     }
     private val bindings: CitiesBindings by inject {
-        parametersOf(this, directionType, outEventId)
+        parametersOf(this, timeCapsule, directionType, outEventId)
     }
     private var directionType: DirectionType by argumentNotNull()
     private var outEventId: EventId by argumentNotNull()
@@ -39,6 +41,7 @@ class CitiesFragment : ScopeFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        timeCapsule = AndroidTimeCapsule(savedInstanceState)
         bindings.setup(mviView)
         lifecycle.addObserver(mviView)
     }
@@ -48,6 +51,11 @@ class CitiesFragment : ScopeFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = mviView.createView(inflater, container)
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.saveState(outState)
+    }
 
     override fun onDestroy() {
         lifecycle.removeObserver(mviView)

@@ -5,7 +5,9 @@ import com.badoo.mvicore.android.AndroidBindings
 import com.badoo.mvicore.binder.using
 import ua.searchtickets.cities.CitiesFeature.News
 import ua.searchtickets.cities.CitiesFeature.Wish
-import ua.searchtickets.cities.CitiesView.*
+import ua.searchtickets.cities.CitiesView.CityItem
+import ua.searchtickets.cities.CitiesView.UiEvent
+import ua.searchtickets.cities.CitiesView.ViewModel
 import ua.searchtickets.common.navigation.Coordinator
 import ua.searchtickets.common.sharedfeature.EventId
 import ua.searchtickets.common.sharedfeature.SharedFeature
@@ -38,7 +40,7 @@ class CitiesBindings(
         binder.bind(view to feature using { uiEvent ->
             when (uiEvent) {
                 UiEvent.BackClicked -> Wish.NavigateBack
-                is UiEvent.SearchQueryChanged -> Wish.SearchCities(uiEvent.query)
+                is UiEvent.SearchQueryChanged -> Wish.ChangeSearchQuery(uiEvent.query)
                 is UiEvent.CitySelected -> Wish.ChooseCity(uiEvent.city)
             }
         })
